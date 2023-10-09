@@ -21,6 +21,9 @@ class data:
     def mean(self):
        this_mean=np.mean(self.R99)
        return this_mean
+    def tts(self):
+       this_tts=self.mean()*n
+       return this_tts
 
 
 # I'm fixing the random seed. In general, it's good to have a random seed somehow
@@ -45,10 +48,10 @@ np.random.seed(17)
 # setting rep=100 is mostly a nice smooth curve for R99
 
 
-rep=50  # this is the number of runs to establish the posterior distribution
+rep=100  # this is the number of runs to establish the posterior distribution
 
 threshold=.9
-vector_length=[2,3,4,5,6,7,8,10,16,32]
+vector_length=[2,3,4,5,6,7,8,10,16,20,26,32,50]
 
 success_rate=[]
 mean=[]
@@ -74,12 +77,15 @@ for n in vector_length:
     R99=np.array(np.log(1-.99)/np.log(1-p))
     this_data=data(n,beta_a,beta_b,p,R99)
     this_mean=this_data.mean()
+    this_tts=this_data.tts()
     dist.append( this_data)
     mean.append( this_mean)
+    tts.append( this_tts)
 
 
 
 plt.plot(vector_length, mean,'bo-')
+plt.plot(vector_length, tts,'rx-')
 plt.xlabel('N')
 plt.ylabel('R99 mean')
 plt.title(f'R99: average number of runs \n  to get a vector of length N \n to have one value above a reference value of {threshold}')
